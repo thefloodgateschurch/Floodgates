@@ -26,11 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build
         run: npm run build
-          env:
-            VITE_BIBLE_API_KEY: ${{ secrets.VITE_BIBLE_API_KEY }}
-            VITE_BIBLE_ID: ${{ secrets.VITE_BIBLE_ID }}
+        env:
+          VITE_BIBLE_API_KEY: ${{ secrets.VITE_BIBLE_API_KEY }}
+          VITE_BIBLE_ID: ${{ secrets.VITE_BIBLE_ID }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
