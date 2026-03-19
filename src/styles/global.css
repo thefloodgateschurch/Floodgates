@@ -1928,3 +1928,154 @@ section {
   opacity: 0.5;
   font-weight: 600;
 }
+/* ─────────────────────────────────────────
+   PRAYER PAGE
+───────────────────────────────────────── */
+.prayer-hero-tagline {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(13px, 1.5vw, 16px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.08em;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+.prayer-content-section {
+  padding: 0 var(--space-md) var(--space-2xl);
+}
+
+.prayer-block-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.prayer-block {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0 var(--space-xl);
+  padding: 64px 0;
+  align-items: start;
+}
+
+.prayer-block-left {
+  position: sticky;
+  top: 96px;
+}
+
+.prayer-block-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: 10px;
+}
+
+.prayer-block-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.prayer-block-body {
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: var(--text-secondary);
+  line-height: 1.9;
+}
+
+.prayer-block-body em {
+  color: var(--blue-light);
+  font-style: italic;
+}
+
+.prayer-block-body strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.prayer-rule {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.prayer-timeslot-btn {
+  display: inline-block;
+  background: transparent;
+  color: var(--blue-mid);
+  border: 1px solid var(--blue-mid);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 13px 28px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+  margin-top: 8px;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Prayer Request Card */
+.prayer-request-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  padding: 64px 0;
+  align-items: center;
+}
+
+.prayer-coming-soon {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 44px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.prayer-coming-icon {
+  font-size: 36px;
+  opacity: 0.6;
+}
+
+.prayer-coming-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+
+.prayer-coming-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+/* ─────────────────────────────────────────
+   PRAYER MOBILE
+───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .prayer-block {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    padding: 44px 0;
+  }
+
+  .prayer-block-left {
+    position: static;
+  }
+
+  .prayer-request-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    padding: 44px 0;
+  }
+}
