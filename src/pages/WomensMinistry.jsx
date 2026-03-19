@@ -1,9 +1,20 @@
+import { useState } from "react";
 import { churchImg } from "../assets/images";
+
+const API_KEY = "46BobXnlGEI9rjiQAs4BT";
+const BIBLE_ID = "78a9f6124f344018-01";
 
 const scriptureWeeks = [
   {
     week: "March 2–6",
     scriptures: [
+      "JHN.3.30",
+      "PSA.37.3-6",
+      "PSA.51.10-12",
+      "PSA.115.1-3",
+      "PSA.139.23-24",
+    ],
+    labels: [
       "John 3:30",
       "Psalm 37:3-6",
       "Psalm 51:10-12",
@@ -14,6 +25,13 @@ const scriptureWeeks = [
   {
     week: "March 9–13",
     scriptures: [
+      "PRO.3.5-6",
+      "PRO.16.1-3",
+      "MIC.6.8",
+      "MAT.16.24-27",
+      "MAT.23.11-12",
+    ],
+    labels: [
       "Proverbs 3:5-6",
       "Proverbs 16:1-3",
       "Micah 6:8",
@@ -24,6 +42,13 @@ const scriptureWeeks = [
   {
     week: "March 16–20",
     scriptures: [
+      "LUK.9.23-24",
+      "JHN.15.4-5",
+      "ROM.8.13-14",
+      "ROM.12.1-2",
+      "2CO.12.9-10",
+    ],
+    labels: [
       "Luke 9:23-24",
       "John 15:4-5",
       "Romans 8:13-14",
@@ -34,6 +59,13 @@ const scriptureWeeks = [
   {
     week: "March 23–27",
     scriptures: [
+      "GAL.2.20-21",
+      "GAL.5.22-26",
+      "EPH.4.2-6",
+      "PHP.2.3-4",
+      "COL.3.1-4",
+    ],
+    labels: [
       "Galatians 2:20-21",
       "Galatians 5:22-26",
       "Ephesians 4:2-6",
@@ -44,6 +76,13 @@ const scriptureWeeks = [
   {
     week: "March 30 – April 3",
     scriptures: [
+      "COL.3.12-13",
+      "COL.3.23-24",
+      "HEB.12.1-3",
+      "JAS.4.6",
+      "JHN.3.30",
+    ],
+    labels: [
       "Colossians 3:12-13",
       "Colossians 3:23-24",
       "Hebrews 12:1-3",
@@ -54,6 +93,42 @@ const scriptureWeeks = [
 ];
 
 export default function WomensMinistry() {
+  const [activeVerse, setActiveVerse] = useState(null);
+  const [verseText, setVerseText] = useState("");
+  const [verseRef, setVerseRef] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  const fetchVerse = async (passageId, label) => {
+    setLoading(true);
+    setPanelOpen(true);
+    setActiveVerse(label);
+    setVerseText("");
+    setVerseRef(label);
+
+    try {
+      const res = await fetch(
+        `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/passages/${passageId}?content-type=text&include-verse-numbers=false`,
+        { headers: { "api-key": API_KEY } },
+      );
+      const data = await res.json();
+      const text = data?.data?.content?.replace(/\s+/g, " ").trim();
+      setVerseText(text || "Verse not found.");
+    } catch {
+      setVerseText("Unable to load verse. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closePanel = () => {
+    setPanelOpen(false);
+    setTimeout(() => {
+      setActiveVerse(null);
+      setVerseText("");
+    }, 400);
+  };
+
   return (
     <>
       {/* Hero */}
@@ -137,6 +212,17 @@ export default function WomensMinistry() {
                 March 2026
               </h2>
               <div className="section-divider" style={{ margin: "16px 0 0" }} />
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "var(--text-muted)",
+                  marginTop: "12px",
+                  fontFamily: "Montserrat, sans-serif",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Tap any verse to read it in NIV
+              </p>
             </div>
 
             <div className="womens-weeks">
@@ -144,10 +230,14 @@ export default function WomensMinistry() {
                 <div key={i} className="womens-week-row">
                   <div className="womens-week-label">{week.week}</div>
                   <div className="womens-week-scriptures">
-                    {week.scriptures.map((s, j) => (
-                      <span key={j} className="womens-scripture-chip">
-                        {s}
-                      </span>
+                    {week.scriptures.map((id, j) => (
+                      <button
+                        key={j}
+                        className={`womens-scripture-chip ${activeVerse === week.labels[j] ? "active" : ""}`}
+                        onClick={() => fetchVerse(id, week.labels[j])}
+                      >
+                        {week.labels[j]}
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -156,6 +246,44 @@ export default function WomensMinistry() {
           </div>
         </div>
       </section>
+
+      {/* Overlay */}
+      <div
+        className={`verse-overlay ${panelOpen ? "open" : ""}`}
+        onClick={closePanel}
+      />
+
+      {/* Slide-up Panel */}
+      <div className={`verse-panel ${panelOpen ? "open" : ""}`}>
+        <div className="verse-panel-handle" />
+        <div className="verse-panel-inner">
+          <div className="verse-panel-header">
+            <div>
+              <p className="verse-panel-eyebrow">NIV · Scripture</p>
+              <h3 className="verse-panel-ref">{verseRef}</h3>
+            </div>
+            <button className="verse-panel-close" onClick={closePanel}>
+              ✕
+            </button>
+          </div>
+
+          <div className="verse-panel-body">
+            {loading ? (
+              <div className="verse-loading">
+                <div className="verse-loading-dot" />
+                <div className="verse-loading-dot" />
+                <div className="verse-loading-dot" />
+              </div>
+            ) : (
+              <p className="verse-text">{verseText}</p>
+            )}
+          </div>
+
+          <div className="verse-panel-footer">
+            <span className="verse-panel-tag">New International Version</span>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

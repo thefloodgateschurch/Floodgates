@@ -1735,3 +1735,194 @@ section {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+/* ─────────────────────────────────────────
+   VERSE PANEL
+───────────────────────────────────────── */
+.womens-scripture-chip {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+  transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+  cursor: pointer;
+}
+
+.womens-scripture-chip:hover {
+  border-color: var(--blue-mid);
+  color: var(--blue-light);
+  background: var(--blue-glow);
+}
+
+.womens-scripture-chip.active {
+  border-color: var(--blue-mid);
+  background: var(--blue-glow);
+  color: var(--blue-light);
+}
+
+.verse-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.verse-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.verse-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2001;
+  background: var(--dark-gray);
+  border-top: 1px solid var(--border-blue);
+  border-radius: 20px 20px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.verse-panel.open {
+  transform: translateY(0);
+}
+
+.verse-panel-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+
+.verse-panel-inner {
+  padding: 20px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.verse-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.verse-panel-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue-mid);
+  margin-bottom: 6px;
+}
+
+.verse-panel-ref {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.verse-panel-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+
+.verse-panel-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.verse-panel-body {
+  flex: 1;
+}
+
+.verse-text {
+  font-family: 'Georgia', serif;
+  font-size: clamp(16px, 2vw, 20px);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.9;
+  font-style: italic;
+}
+
+.verse-loading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.verse-loading-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-mid);
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+.verse-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.verse-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.verse-panel-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 16px;
+}
+
+.verse-panel-tag {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .verse-panel-inner {
+    padding: 16px 20px 32px;
+  }
+}
+```
+
+Before pushing, move the API key to an `.env` file. Create `.env` in your project root:
+```
+VITE_BIBLE_API_KEY=46BobXnlGEI9rjiQAs4BT
+VITE_BIBLE_ID=78a9f6124f344018-01
