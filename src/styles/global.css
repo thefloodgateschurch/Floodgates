@@ -1920,3 +1920,11 @@ section {
     padding: 16px 20px 32px;
   }
 }
+.verse-text .v {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 0.7em;
+  vertical-align: super;
+  opacity: 0.5;
+  font-weight: 600;
+}

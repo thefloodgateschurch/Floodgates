@@ -9,10 +9,10 @@ const scriptureWeeks = [
     week: "March 2–6",
     scriptures: [
       "JHN.3.30",
-      "PSA.37.3-6",
-      "PSA.51.10-12",
-      "PSA.115.1-3",
-      "PSA.139.23-24",
+      "PSA.37.3-PSA.37.6",
+      "PSA.51.10-PSA.51.12",
+      "PSA.115.1-PSA.115.3",
+      "PSA.139.23-PSA.139.24",
     ],
     labels: [
       "John 3:30",
@@ -25,11 +25,11 @@ const scriptureWeeks = [
   {
     week: "March 9–13",
     scriptures: [
-      "PRO.3.5-6",
-      "PRO.16.1-3",
+      "PRO.3.5-PRO.3.6",
+      "PRO.16.1-PRO.16.3",
       "MIC.6.8",
-      "MAT.16.24-27",
-      "MAT.23.11-12",
+      "MAT.16.24-MAT.16.27",
+      "MAT.23.11-MAT.23.12",
     ],
     labels: [
       "Proverbs 3:5-6",
@@ -42,11 +42,11 @@ const scriptureWeeks = [
   {
     week: "March 16–20",
     scriptures: [
-      "LUK.9.23-24",
-      "JHN.15.4-5",
-      "ROM.8.13-14",
-      "ROM.12.1-2",
-      "2CO.12.9-10",
+      "LUK.9.23-LUK.9.24",
+      "JHN.15.4-JHN.15.5",
+      "ROM.8.13-ROM.8.14",
+      "ROM.12.1-ROM.12.2",
+      "2CO.12.9-2CO.12.10",
     ],
     labels: [
       "Luke 9:23-24",
@@ -59,11 +59,11 @@ const scriptureWeeks = [
   {
     week: "March 23–27",
     scriptures: [
-      "GAL.2.20-21",
-      "GAL.5.22-26",
-      "EPH.4.2-6",
-      "PHP.2.3-4",
-      "COL.3.1-4",
+      "GAL.2.20-GAL.2.21",
+      "GAL.5.22-GAL.5.26",
+      "EPH.4.2-EPH.4.6",
+      "PHP.2.3-PHP.2.4",
+      "COL.3.1-COL.3.4",
     ],
     labels: [
       "Galatians 2:20-21",
@@ -76,9 +76,9 @@ const scriptureWeeks = [
   {
     week: "March 30 – April 3",
     scriptures: [
-      "COL.3.12-13",
-      "COL.3.23-24",
-      "HEB.12.1-3",
+      "COL.3.12-COL.3.13",
+      "COL.3.23-COL.3.24",
+      "HEB.12.1-HEB.12.3",
       "JAS.4.6",
       "JHN.3.30",
     ],
@@ -107,15 +107,27 @@ export default function WomensMinistry() {
     setVerseRef(label);
 
     try {
-      const res = await fetch(
-        `https://api.scripture.api.bible/v1/bibles/${BIBLE_ID}/passages/${passageId}?content-type=text&include-verse-numbers=false`,
-        { headers: { "api-key": API_KEY } },
-      );
+      const url = `https://rest.api.bible/v1/bibles/${BIBLE_ID}/passages/${passageId}`;
+
+      const res = await fetch(url, {
+        headers: {
+          "api-key": API_KEY,
+          accept: "application/json",
+        },
+      });
+
       const data = await res.json();
-      const text = data?.data?.content?.replace(/\s+/g, " ").trim();
-      setVerseText(text || "Verse not found.");
-    } catch {
-      setVerseText("Unable to load verse. Please try again.");
+      console.log("API Response:", data);
+
+      if (data?.data?.content) {
+        const text = data.data.content.replace(/\s+/g, " ").trim();
+        setVerseText(text);
+      } else {
+        setVerseText("Verse not found. Response: " + JSON.stringify(data));
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setVerseText("Error: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -275,7 +287,10 @@ export default function WomensMinistry() {
                 <div className="verse-loading-dot" />
               </div>
             ) : (
-              <p className="verse-text">{verseText}</p>
+              <div
+                className="verse-text"
+                dangerouslySetInnerHTML={{ __html: verseText }}
+              />
             )}
           </div>
 
